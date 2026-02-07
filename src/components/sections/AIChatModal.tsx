@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, Sparkles, MapPin, Users, Calendar, Wallet, AlertTriangle, WifiOff, Mic } from 'lucide-react';
+import { X, Send, Sparkles, MapPin, Users, Calendar, Wallet, WifiOff, Mic } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface Message {
@@ -20,7 +20,7 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
     {
       id: '1',
       type: 'ai',
-      content: "Hello! 👋 I'm TripSync AI, your smart travel companion. I can help you with:\n\n• Plan personalized itineraries\n• Find compatible travel buddies\n• Discover nearby travelers\n• Split group expenses\n• Emergency assistance\n\nWhat would you like to do today?",
+      content: "Hello! 👋 I'm TripSync AI, your smart travel companion. I can help you with:\n\n• Plan personalized itineraries\n• Find compatible travel buddies\n• Discover nearby travelers\n• Split group expenses\n• Live map—who's traveling now & trending spots\n\nWhat would you like to do today?",
       timestamp: 'Just now',
       actions: [
         { label: 'Plan a Trip', icon: Calendar },
@@ -83,8 +83,8 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
       return "💸 Here's your group expense summary:\n\n**Total Trip Expense:** ₹20,100\n\n**Who Owes Whom:**\n• You owe Arjun: ₹2,800\n• Priya owes you: ₹1,100\n\n**Pending Payments:** 2\n**Completed:** 2\n\nShall I send UPI payment reminders?";
     }
     
-    if (lowerInput.includes('sos') || lowerInput.includes('emergency')) {
-      return "🚨 **Emergency Mode Activated**\n\nI'm here to help. You can:\n\n• One-tap SOS to alert emergency contacts\n• Share live location with your group\n• Find nearest hospital (2.3 km)\n• Find nearest police station (1.8 km)\n\nStay calm. Your safety is my priority. Should I activate emergency protocols?";
+    if (lowerInput.includes('live map') || lowerInput.includes('map') || lowerInput.includes('trending') || lowerInput.includes('who\'s traveling')) {
+      return "🗺️ **Live Map**\n\nSee who's traveling in your city right now:\n\n• Real-time traveler pins on the map\n• Trending spots and activity hotspots\n• Tap any pin → view profile & posts\n• \"Meet travelers nearby\" to connect\n\nYour city's travel vibe, live. Want me to open the Live Map?";
     }
     
     return "I understand! Let me help you with that. Could you tell me more about:\n\n• Your destination preference?\n• Travel dates?\n• Budget range?\n• Any specific interests?\n\nThe more details you share, the better I can assist! 🌟";
@@ -107,10 +107,10 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
       ];
     }
     
-    if (lowerInput.includes('sos') || lowerInput.includes('emergency')) {
+    if (lowerInput.includes('live map') || lowerInput.includes('map') || lowerInput.includes('trending')) {
       return [
-        { label: 'Activate SOS', icon: AlertTriangle },
-        { label: 'Share Location', icon: MapPin },
+        { label: 'Open Live Map', icon: MapPin },
+        { label: 'Meet Travelers Nearby', icon: MapPin },
       ];
     }
     
@@ -153,10 +153,9 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
             {[
               { icon: Calendar, label: 'Plan Trip' },
               { icon: Users, label: 'Find Mates' },
-              { icon: MapPin, label: 'Nearby' },
+              { icon: MapPin, label: 'Live Map' },
               { icon: Wallet, label: 'Expenses' },
               { icon: WifiOff, label: 'Offline' },
-              { icon: AlertTriangle, label: 'SOS' },
             ].map(({ icon: Icon, label }) => (
               <button
                 key={label}

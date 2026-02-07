@@ -11,12 +11,14 @@ import ConnectSection from '@/components/sections/ConnectSection';
 import ExpenseSection from '@/components/sections/ExpenseSection';
 import ProfileSection from '@/components/sections/ProfileSection';
 import MessagesModal from '@/components/sections/MessagesModal';
+import AIChatModal from '@/components/sections/AIChatModal';
 import OnboardingScreen from '@/components/screens/OnboardingScreen';
 
 const Index: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [activeSection, setActiveSection] = useState('landing');
   const [showMessages, setShowMessages] = useState(false);
+  const [showAIChat, setShowAIChat] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleNavigate = (section: string) => {
@@ -34,12 +36,15 @@ const Index: React.FC = () => {
     setActiveSection('home');
   };
 
-  // Login Modal
+  // Login / Sign up Modal
   if (showLoginModal) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div className="w-full max-w-md bg-background rounded-3xl shadow-2xl overflow-hidden">
-          <OnboardingScreen onComplete={handleLoginComplete} />
+        <div className="w-full max-w-md max-h-[90vh] bg-background rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+          <OnboardingScreen
+            onComplete={handleLoginComplete}
+            onBack={() => setShowLoginModal(false)}
+          />
         </div>
       </div>
     );
@@ -51,7 +56,7 @@ const Index: React.FC = () => {
         return (
           <>
             <HeroSection 
-              onGetStarted={() => handleNavigate('home')} 
+              onGetStarted={handleLogin}
               onExplore={() => handleNavigate('explore')}
             />
             <FeaturesSection />
@@ -96,23 +101,11 @@ const Index: React.FC = () => {
             <ProfileSection />
           </div>
         );
-      case 'ai':
-        setShowMessages(false);
-        setActiveSection('landing');
-        return (
-          <>
-            <HeroSection 
-              onGetStarted={() => handleNavigate('home')} 
-              onExplore={() => handleNavigate('explore')}
-            />
-            <FeaturesSection />
-          </>
-        );
       default:
         return (
           <>
             <HeroSection 
-              onGetStarted={() => handleNavigate('home')} 
+              onGetStarted={handleLogin}
               onExplore={() => handleNavigate('explore')}
             />
             <FeaturesSection />
@@ -126,6 +119,7 @@ const Index: React.FC = () => {
       <Header 
         activeSection={activeSection} 
         onNavigate={handleNavigate}
+        onAskAI={() => setShowAIChat(true)}
         isLoggedIn={isLoggedIn}
         onLogin={handleLogin}
       />
@@ -146,6 +140,12 @@ const Index: React.FC = () => {
       <MessagesModal 
         isOpen={showMessages} 
         onClose={() => setShowMessages(false)} 
+      />
+
+      {/* AI Chat Modal - Ask AI button */}
+      <AIChatModal 
+        isOpen={showAIChat} 
+        onClose={() => setShowAIChat(false)} 
       />
     </div>
   );

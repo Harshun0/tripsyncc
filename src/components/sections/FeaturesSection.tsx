@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Users, MapPin, Shield, Wallet, Calendar, WifiOff, MessageCircle } from 'lucide-react';
+import { Sparkles, Users, MapPin, Wallet, Calendar, WifiOff, MessageCircle } from 'lucide-react';
 
 const FeaturesSection: React.FC = () => {
   const features = [
@@ -22,10 +22,10 @@ const FeaturesSection: React.FC = () => {
       color: 'from-ocean to-primary',
     },
     {
-      icon: Shield,
-      title: 'Emergency SOS',
-      description: 'One-tap emergency alerts, live location sharing, and quick access to nearby hospitals and police stations.',
-      color: 'from-destructive to-sunset-pink',
+      icon: MapPin,
+      title: 'Live Map',
+      description: 'See who\'s traveling in your city now, trending spots, and activity hotspots. Tap a pin to view profile and posts—meet travelers nearby.',
+      color: 'from-primary to-accent',
     },
     {
       icon: Wallet,
@@ -42,7 +42,7 @@ const FeaturesSection: React.FC = () => {
     {
       icon: WifiOff,
       title: 'Offline Survival',
-      description: 'Access saved maps, itineraries, and emergency contacts even without internet connection.',
+      description: 'Access saved maps and itineraries even without internet connection.',
       color: 'from-muted-foreground to-foreground',
     },
     {
@@ -67,7 +67,7 @@ const FeaturesSection: React.FC = () => {
             <span className="text-gradient"> Smart Travel</span>
           </h2>
           <p className="text-lg text-muted-foreground">
-            From AI-powered planning to emergency safety features, TripSync has everything to make your travels smarter, safer, and more social.
+            From AI-powered planning to the live map and connect features, TripSync has everything to make your travels smarter, safer, and more social.
           </p>
         </div>
 

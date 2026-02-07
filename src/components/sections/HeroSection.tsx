@@ -121,12 +121,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, onExplore }) =>
                 </p>
                 <div className="flex gap-2">
                   <div className="flex -space-x-2">
-                    {[1, 2, 3].map((i) => (
+                    {[
+                      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop&crop=face',
+                      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face',
+                      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face',
+                    ].map((src, i) => (
                       <img
                         key={i}
-                        src={`https://images.unsplash.com/photo-${1494790108377 + i * 100000}-be9c29b29330?w=40&h=40&fit=crop&crop=face`}
-                        alt=""
-                        className="w-8 h-8 rounded-full border-2 border-white/20"
+                        src={src}
+                        alt={`Traveler ${i + 1}`}
+                        className="w-8 h-8 rounded-full border-2 border-white/20 object-cover"
                       />
                     ))}
                   </div>

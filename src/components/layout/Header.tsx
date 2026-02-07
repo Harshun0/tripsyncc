@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/button';
 interface HeaderProps {
   activeSection: string;
   onNavigate: (section: string) => void;
+  onAskAI?: () => void;
   isLoggedIn: boolean;
   onLogin: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isLoggedIn, onLogin }) => {
+const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, onAskAI, isLoggedIn, onLogin }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
@@ -56,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isLoggedIn, 
           <div className="flex items-center gap-3">
             {/* AI Button */}
             <Button
-              onClick={() => onNavigate('ai')}
+              onClick={() => onAskAI?.()}
               className="hidden sm:flex items-center gap-2 gradient-primary text-primary-foreground rounded-xl shadow-glow hover:shadow-lg transition-shadow"
             >
               <Sparkles className="w-4 h-4" />
@@ -117,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isLoggedIn, 
             <div className="pt-2 border-t border-border flex gap-2">
               <Button
                 onClick={() => {
-                  onNavigate('ai');
+                  onAskAI?.();
                   setMobileMenuOpen(false);
                 }}
                 className="flex-1 gradient-primary text-primary-foreground rounded-xl"
