@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Wallet, ArrowRight, Check, Clock, Send, Users, CreditCard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { dummyExpenses } from '@/data/dummyProfiles';
 
 const ExpenseSection: React.FC = () => {
+  const [toast, setToast] = useState<string | null>(null);
   const totalExpense = dummyExpenses.reduce((sum, exp) => sum + exp.amount, 0);
   const youOwe = 3800;
   const youAreOwed = 1200;
 
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 2500);
+    return () => clearTimeout(t);
+  }, [toast]);
+
   return (
-    <section className="py-20 lg:py-32 bg-muted/30">
+    <section className="py-20 lg:py-32 bg-muted/30 relative">
+      {toast && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-4 py-3 bg-foreground text-background text-sm font-medium rounded-xl shadow-lg animate-fade-in">
+          {toast}
+        </div>
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -54,7 +66,7 @@ const ExpenseSection: React.FC = () => {
                     <p className="text-muted-foreground">3 members</p>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" className="rounded-full">
+                <Button variant="outline" size="sm" className="rounded-full" onClick={() => setToast('Add expense form — coming soon!')}>
                   <Plus className="w-4 h-4 mr-1" />
                   Add Expense
                 </Button>
@@ -129,11 +141,11 @@ const ExpenseSection: React.FC = () => {
               </div>
 
               <div className="flex gap-4 mt-8">
-                <Button className="flex-1 h-14 gradient-primary text-primary-foreground rounded-2xl text-lg font-semibold shadow-glow">
+                <Button className="flex-1 h-14 gradient-primary text-primary-foreground rounded-2xl text-lg font-semibold shadow-glow" onClick={() => setToast('Opening UPI...')}>
                   <CreditCard className="w-5 h-5 mr-2" />
                   Pay via UPI
                 </Button>
-                <Button variant="outline" className="flex-1 h-14 rounded-2xl text-lg font-semibold border-2 border-primary text-primary">
+                <Button variant="outline" className="flex-1 h-14 rounded-2xl text-lg font-semibold border-2 border-primary text-primary" onClick={() => setToast('Reminders sent!')}>
                   <Send className="w-5 h-5 mr-2" />
                   Send Reminders
                 </Button>

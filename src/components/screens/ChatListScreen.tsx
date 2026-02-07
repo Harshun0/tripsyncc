@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, BadgeCheck } from 'lucide-react';
 import { dummyProfiles } from '@/data/dummyProfiles';
 
@@ -7,6 +7,15 @@ interface ChatListScreenProps {
 }
 
 const ChatListScreen: React.FC<ChatListScreenProps> = ({ onOpenChat }) => {
+  const [requestDismissed, setRequestDismissed] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 2500);
+    return () => clearTimeout(t);
+  }, [toast]);
+
   const chats = dummyProfiles.slice(0, 5).map(profile => ({
     ...profile,
     lastMessage: getLastMessage(profile.id),
@@ -31,7 +40,12 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({ onOpenChat }) => {
   }
 
   return (
-    <div className="pb-4">
+    <div className="pb-4 relative">
+      {toast && (
+        <div className="absolute bottom-4 left-4 right-4 z-50 px-4 py-3 bg-foreground text-background text-sm font-medium rounded-xl shadow-lg text-center animate-fade-in">
+          {toast}
+        </div>
+      )}
       {/* Header */}
       <div className="sticky top-0 z-30 glass-effect px-4 py-3">
         <h1 className="text-xl font-bold text-foreground mb-3">Messages</h1>
@@ -101,33 +115,49 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({ onOpenChat }) => {
       </div>
 
       {/* Travel Requests */}
-      <div className="px-4 mt-6">
-        <h3 className="text-lg font-semibold text-foreground mb-3">Trip-Mate Requests</h3>
-        
-        <div className="travel-card p-4">
-          <div className="flex items-center gap-3 mb-3">
-            <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop&crop=face"
-              alt="Sneha"
-              className="w-12 h-12 rounded-full object-cover"
-            />
-            <div className="flex-1">
-              <h4 className="font-semibold text-foreground">Sneha Kapoor</h4>
-              <p className="text-xs text-muted-foreground">Wants to join your Goa trip</p>
-            </div>
-            <span className="chip chip-primary text-xs">81% match</span>
-          </div>
+      {!requestDismissed && (
+        <div className="px-4 mt-6">
+          <h3 className="text-lg font-semibold text-foreground mb-3">Trip-Mate Requests</h3>
           
-          <div className="flex gap-2">
-            <button className="flex-1 py-2 gradient-primary text-primary-foreground rounded-xl text-sm font-medium">
-              Accept
-            </button>
-            <button className="flex-1 py-2 bg-muted text-muted-foreground rounded-xl text-sm font-medium">
-              Decline
-            </button>
+          <div className="travel-card p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <img
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop&crop=face"
+                alt="Sneha"
+                className="w-12 h-12 rounded-full object-cover"
+              />
+              <div className="flex-1">
+                <h4 className="font-semibold text-foreground">Sneha Kapoor</h4>
+                <p className="text-xs text-muted-foreground">Wants to join your Goa trip</p>
+              </div>
+              <span className="chip chip-primary text-xs">81% match</span>
+            </div>
+            
+            <div className="flex gap-2">
+              <button
+                type="button"
+                className="flex-1 py-2 gradient-primary text-primary-foreground rounded-xl text-sm font-medium"
+                onClick={() => {
+                  setRequestDismissed(true);
+                  setToast('Request accepted! Sneha added to your trip.');
+                }}
+              >
+                Accept
+              </button>
+              <button
+                type="button"
+                className="flex-1 py-2 bg-muted text-muted-foreground rounded-xl text-sm font-medium hover:bg-muted/80"
+                onClick={() => {
+                  setRequestDismissed(true);
+                  setToast('Request declined.');
+                }}
+              >
+                Decline
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

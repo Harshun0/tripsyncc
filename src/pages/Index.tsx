@@ -60,33 +60,39 @@ const Index: React.FC = () => {
               onExplore={() => handleNavigate('explore')}
             />
             <FeaturesSection />
-            <TravelersSection />
-            <ItinerarySection />
-            <ConnectSection />
+            <TravelersSection
+              onOpenChat={() => setShowMessages(true)}
+              onViewMatch={(id) => { setShowMessages(true); }}
+            />
+            <ItinerarySection onNavigate={handleNavigate} />
+            <ConnectSection onOpenMessages={() => setShowMessages(true)} />
           </>
         );
       case 'home':
         return (
           <div className="pt-20">
-            <FeedSection />
+            <FeedSection onOpenMessages={() => setShowMessages(true)} />
           </div>
         );
       case 'explore':
         return (
           <div className="pt-20">
-            <TravelersSection />
+            <TravelersSection
+              onOpenChat={() => setShowMessages(true)}
+              onViewMatch={() => setShowMessages(true)}
+            />
           </div>
         );
       case 'itinerary':
         return (
           <div className="pt-20">
-            <ItinerarySection />
+            <ItinerarySection onNavigate={handleNavigate} />
           </div>
         );
       case 'connect':
         return (
           <div className="pt-20">
-            <ConnectSection />
+            <ConnectSection onOpenMessages={() => setShowMessages(true)} />
           </div>
         );
       case 'expenses':
@@ -98,7 +104,7 @@ const Index: React.FC = () => {
       case 'profile':
         return (
           <div className="pt-20">
-            <ProfileSection />
+            <ProfileSection onOpenMessages={() => setShowMessages(true)} onNavigate={handleNavigate} />
           </div>
         );
       default:

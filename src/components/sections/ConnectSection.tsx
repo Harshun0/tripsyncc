@@ -15,8 +15,13 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const ConnectSection: React.FC = () => {
+interface ConnectSectionProps {
+  onOpenMessages?: () => void;
+}
+
+const ConnectSection: React.FC<ConnectSectionProps> = ({ onOpenMessages }) => {
   const [selectedPin, setSelectedPin] = useState<string | null>(null);
+  const [mapZoom, setMapZoom] = useState(1);
 
   // Live Travel Vibe - mock data
   const liveTravelers = [
@@ -88,33 +93,92 @@ const ConnectSection: React.FC = () => {
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
-              {/* Map placeholder + pins concept */}
-              <div className="lg:col-span-2 travel-card p-6 min-h-[320px] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5 rounded-2xl" />
-                <div className="relative flex flex-col h-full">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-sm font-medium text-muted-foreground">Real-time view</span>
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-success/10 text-success text-xs font-medium rounded-full">
-                      <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+              {/* Live map - map-style layout */}
+              <div className="lg:col-span-2 travel-card p-0 min-h-[360px] relative overflow-hidden rounded-2xl">
+                {/* Map toolbar */}
+                <div className="absolute top-3 left-3 right-3 z-10 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 px-3 py-2 bg-background/95 backdrop-blur rounded-xl shadow-sm border border-border/50">
+                    <MapPin className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-medium text-foreground">Goa, India</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-success/90 text-white text-xs font-medium rounded-lg shadow-sm">
+                      <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                       Live
                     </span>
+                    <div className="flex rounded-lg overflow-hidden border border-border/50 shadow-sm bg-background/95 backdrop-blur">
+                      <button type="button" onClick={() => setMapZoom((z) => Math.min(1.5, z + 0.1))} className="p-2 hover:bg-muted/50 transition-colors" aria-label="Zoom in">+</button>
+                      <button type="button" onClick={() => setMapZoom((z) => Math.max(0.7, z - 0.1))} className="p-2 hover:bg-muted/50 transition-colors border-l border-border/50" aria-label="Zoom out">−</button>
+                    </div>
                   </div>
-                  {/* Map mock with clickable pins */}
-                  <div className="flex-1 border-2 border-dashed border-primary/20 rounded-2xl bg-muted/30 flex items-center justify-center relative">
-                    <MapPin className="w-16 h-16 text-primary/30 absolute top-1/4 left-1/3" />
-                    <MapPin className="w-14 h-14 text-primary/50 absolute top-1/2 left-1/2 cursor-pointer hover:scale-110 transition-transform" onClick={() => setSelectedPin(selectedPin === 'center' ? null : 'center')} />
-                    <MapPin className="w-12 h-12 text-secondary/40 absolute bottom-1/3 right-1/4" />
-                    <p className="text-muted-foreground text-sm text-center px-4">
-                      Map: Who&apos;s traveling now • Trending spots • Activity heat
-                    </p>
+                </div>
+
+                {/* Map surface - land, water, roads */}
+                <div className="relative h-[320px] sm:h-[360px] rounded-2xl overflow-hidden bg-[#e8f4f8]">
+                  <div
+                    className="absolute inset-0 origin-center transition-transform duration-200"
+                    style={{ transform: `scale(${mapZoom})` }}
+                  >
+                  {/* Water (coast/sea) */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#b8dce8] via-[#cce8f0] to-[#a8d4e4]" />
+                  {/* Land mass - Goa-like shape */}
+                  <div className="absolute bottom-0 left-0 right-0 h-[75%] bg-gradient-to-t from-[#d4e8c4] via-[#e2eed8] to-[#e8f0e0] rounded-t-[40%] border-t-4 border-[#c0d8b0]" />
+                  <div className="absolute top-[15%] right-[5%] w-[22%] h-[25%] rounded-full bg-[#dcecd4] border-2 border-[#c0d8b0]" />
+                  <div className="absolute top-[25%] left-[8%] w-[18%] h-[20%] rounded-full bg-[#dcecd4] border-2 border-[#c0d8b0]" />
+
+                  {/* Roads / routes */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
+                    <path d="M 18 180 Q 80 120 120 200 T 220 160 T 320 220 L 380 180" fill="none" stroke="rgba(0,0,0,0.12)" strokeWidth="4" strokeLinecap="round" />
+                    <path d="M 60 240 L 160 200 L 280 260 L 360 220" fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth="3" strokeLinecap="round" />
+                    <path d="M 100 80 L 200 140 L 300 100" fill="none" stroke="rgba(0,0,0,0.08)" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
+
+                  {/* Activity heat glow - hotspots */}
+                  <div className="absolute top-[28%] left-[38%] w-16 h-16 rounded-full bg-primary/25 blur-xl animate-pulse" />
+                  <div className="absolute top-[45%] left-[55%] w-12 h-12 rounded-full bg-secondary/20 blur-lg" />
+                  <div className="absolute bottom-[35%] left-[22%] w-10 h-10 rounded-full bg-primary/20 blur-lg" />
+
+                  {/* Pins - travelers / spots */}
+                  {[
+                    { id: '1', x: '38%', y: '32%', label: 'Anjuna', spot: '24 active', active: true },
+                    { id: '2', x: '58%', y: '48%', label: 'Fontainhas', spot: '18 active', active: true },
+                    { id: '3', x: '24%', y: '58%', label: 'Dudhsagar', spot: '12 active', active: false },
+                  ].map((pin) => (
+                    <button
+                      key={pin.id}
+                      type="button"
+                      onClick={() => setSelectedPin(selectedPin === pin.id ? null : pin.id)}
+                      className="absolute z-20 transform -translate-x-1/2 -translate-y-full group"
+                      style={{ left: pin.x, top: pin.y }}
+                    >
+                      <div className={`relative flex flex-col items-center transition-transform group-hover:scale-110 ${selectedPin === pin.id ? 'scale-110' : ''}`}>
+                        <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white ${selectedPin === pin.id ? 'bg-primary ring-4 ring-primary/30' : 'bg-primary'}`}>
+                          <User className="w-4 h-4 text-white" />
+                        </div>
+                        {pin.active && (
+                          <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-success border-2 border-white" />
+                        )}
+                        <div className="mt-1 px-2 py-0.5 rounded-md bg-background/95 shadow border border-border/50 text-[10px] font-medium text-foreground whitespace-nowrap opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity">
+                          {pin.label} · {pin.spot}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+
+                  {/* Map label - ocean */}
+                  <div className="absolute bottom-2 left-2 px-2 py-1 rounded bg-background/70 text-[10px] text-muted-foreground font-medium">
+                    Arabian Sea
                   </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <Button size="sm" className="rounded-full gap-1">
-                      <Users className="w-3.5 h-3.5" />
-                      Meet travelers nearby
-                    </Button>
-                    <span className="text-xs text-muted-foreground self-center">Click a pin → profile + posts</span>
                   </div>
+                </div>
+
+                {/* Footer strip */}
+                <div className="px-4 py-3 flex flex-wrap items-center justify-between gap-2 border-t border-border bg-muted/30">
+                  <Button size="sm" className="rounded-full gap-1.5" onClick={() => onOpenMessages?.()}>
+                    <Users className="w-3.5 h-3.5" />
+                    Meet travelers nearby
+                  </Button>
+                  <span className="text-xs text-muted-foreground">Tap a pin → profile & posts</span>
                 </div>
               </div>
 

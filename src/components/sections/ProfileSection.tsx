@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Settings, Edit2, MapPin, BadgeCheck, Award, Wallet, Heart, Mountain, Utensils, Compass, Sunrise, Camera, Share2, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const ProfileSection: React.FC = () => {
+interface ProfileSectionProps {
+  onOpenMessages?: () => void;
+  onNavigate?: (section: string) => void;
+}
+
+const ProfileSection: React.FC<ProfileSectionProps> = ({ onOpenMessages, onNavigate }) => {
+  const [toast, setToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 2500);
+    return () => clearTimeout(t);
+  }, [toast]);
   const userProfile = {
     name: 'You',
     displayName: 'Traveler',
@@ -37,7 +49,12 @@ const ProfileSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 lg:py-32 bg-background">
+    <section className="py-20 lg:py-32 bg-background relative">
+      {toast && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-4 py-3 bg-foreground text-background text-sm font-medium rounded-xl shadow-lg animate-fade-in">
+          {toast}
+        </div>
+      )}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Profile Header */}
         <div className="relative mb-12">
@@ -69,11 +86,11 @@ const ProfileSection: React.FC = () => {
           
           {/* Action Buttons */}
           <div className="absolute bottom-4 right-4 flex gap-2">
-            <Button variant="outline" size="sm" className="rounded-full bg-white/90 backdrop-blur-sm">
+            <Button variant="outline" size="sm" className="rounded-full bg-white/90 backdrop-blur-sm" onClick={() => setToast('Settings — coming soon')}>
               <Settings className="w-4 h-4 mr-2" />
               Settings
             </Button>
-            <Button size="sm" className="rounded-full gradient-primary text-white">
+            <Button size="sm" className="rounded-full gradient-primary text-white" onClick={() => setToast('Edit profile — coming soon')}>
               <Edit2 className="w-4 h-4 mr-2" />
               Edit Profile
             </Button>
@@ -180,11 +197,11 @@ const ProfileSection: React.FC = () => {
 
             {/* Action Buttons */}
             <div className="space-y-3">
-              <Button className="w-full h-12 gradient-primary text-primary-foreground rounded-xl font-semibold">
+              <Button className="w-full h-12 gradient-primary text-primary-foreground rounded-xl font-semibold" onClick={() => setToast('Share link copied!')}>
                 <Share2 className="w-5 h-5 mr-2" />
                 Share Profile
               </Button>
-              <Button variant="outline" className="w-full h-12 rounded-xl font-semibold border-2 border-primary text-primary">
+              <Button variant="outline" className="w-full h-12 rounded-xl font-semibold border-2 border-primary text-primary" onClick={() => onOpenMessages?.()}>
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Messages
               </Button>

@@ -3,11 +3,22 @@ import { MapPin, Clock, Wallet, ChevronDown, ChevronUp, Sparkles, Calendar, Arro
 import { Button } from '@/components/ui/button';
 import { itineraryDays } from '@/data/dummyProfiles';
 
-const ItinerarySection: React.FC = () => {
+interface ItinerarySectionProps {
+  onNavigate?: (section: string) => void;
+}
+
+const ItinerarySection: React.FC<ItinerarySectionProps> = ({ onNavigate }) => {
   const [expandedDay, setExpandedDay] = useState<number | null>(1);
   const [destination, setDestination] = useState('');
   const [days, setDays] = useState('');
   const [budget, setBudget] = useState('');
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+
+  const toggleInterest = (interest: string) => {
+    setSelectedInterests((prev) =>
+      prev.includes(interest) ? prev.filter((i) => i !== interest) : [...prev, interest]
+    );
+  };
   
   const totalCost = itineraryDays.reduce(
     (total, day) => total + day.activities.reduce((sum, act) => sum + act.cost, 0),
@@ -87,7 +98,13 @@ const ItinerarySection: React.FC = () => {
                     {['Adventure', 'Food', 'Culture', 'Nature', 'Beach', 'Nightlife'].map((interest) => (
                       <button
                         key={interest}
-                        className="px-4 py-2 rounded-full text-sm font-medium bg-muted hover:bg-primary/10 hover:text-primary transition-colors"
+                        type="button"
+                        onClick={() => toggleInterest(interest)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                          selectedInterests.includes(interest)
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted hover:bg-primary/10 hover:text-primary'
+                        }`}
                       >
                         {interest}
                       </button>
@@ -95,7 +112,10 @@ const ItinerarySection: React.FC = () => {
                   </div>
                 </div>
 
-                <Button className="w-full h-14 mt-4 gradient-primary text-primary-foreground rounded-2xl text-lg font-semibold shadow-glow hover:shadow-lg transition-shadow">
+                <Button
+                  className="w-full h-14 mt-4 gradient-primary text-primary-foreground rounded-2xl text-lg font-semibold shadow-glow hover:shadow-lg transition-shadow"
+                  onClick={() => onNavigate?.('itinerary')}
+                >
                   <Sparkles className="w-5 h-5 mr-2" />
                   Generate AI Itinerary
                 </Button>

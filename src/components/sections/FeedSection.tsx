@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Heart, MessageCircle, Bookmark, Share2, MoreHorizontal, MapPin, TrendingUp } from 'lucide-react';
 import { dummyPosts, dummyProfiles, TravelPost } from '@/data/dummyProfiles';
 
-const FeedSection: React.FC = () => {
+interface FeedSectionProps {
+  onOpenMessages?: () => void;
+}
+
+const FeedSection: React.FC<FeedSectionProps> = ({ onOpenMessages }) => {
   const [posts, setPosts] = useState<TravelPost[]>(dummyPosts);
+  const [toast, setToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 2500);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   const toggleLike = (postId: string) => {
     setPosts(posts.map(post => 
@@ -22,7 +33,12 @@ const FeedSection: React.FC = () => {
   };
 
   return (
-    <section className="py-20 lg:py-32 bg-muted/30">
+    <section className="py-20 lg:py-32 bg-muted/30 relative">
+      {toast && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-4 py-3 bg-foreground text-background text-sm font-medium rounded-xl shadow-lg animate-fade-in">
+          {toast}
+        </div>
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
@@ -55,7 +71,7 @@ const FeedSection: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <button className="p-2 hover:bg-muted rounded-full transition-colors">
+                  <button type="button" className="p-2 hover:bg-muted rounded-full transition-colors" onClick={() => setToast('More options — coming soon')}>
                     <MoreHorizontal className="w-5 h-5 text-muted-foreground" />
                   </button>
                 </div>
@@ -82,11 +98,11 @@ const FeedSection: React.FC = () => {
                         />
                         <span className="font-medium text-sm">{post.likes.toLocaleString()}</span>
                       </button>
-                      <button className="flex items-center gap-2 hover:text-primary transition-colors">
+                      <button type="button" className="flex items-center gap-2 hover:text-primary transition-colors" onClick={() => setToast('Comments — coming soon')}>
                         <MessageCircle className="w-6 h-6" />
                         <span className="font-medium text-sm">{post.comments}</span>
                       </button>
-                      <button className="hover:text-primary transition-colors">
+                      <button type="button" className="hover:text-primary transition-colors" onClick={() => setToast('Link copied!')}>
                         <Share2 className="w-6 h-6" />
                       </button>
                     </div>
@@ -153,7 +169,7 @@ const FeedSection: React.FC = () => {
                         <p className="text-xs text-muted-foreground">{profile.interests[0]} • {profile.interests[1]}</p>
                       </div>
                     </div>
-                    <button className="px-3 py-1.5 text-xs font-medium gradient-primary text-white rounded-full">
+                    <button type="button" className="px-3 py-1.5 text-xs font-medium gradient-primary text-white rounded-full" onClick={() => setToast(`Following ${profile.name}`)}>
                       Follow
                     </button>
                   </div>
