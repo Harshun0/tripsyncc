@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, X } from 'lucide-react';
+import { MessageCircle, X } from 'lucide-react';
 
 interface FloatingChatButtonProps {
   onClick: () => void;
@@ -11,7 +11,7 @@ const FloatingChatButton: React.FC<FloatingChatButtonProps> = ({ onClick, isOpen
     <button
       onClick={onClick}
       className="fixed bottom-6 right-6 z-40 w-16 h-16 gradient-primary rounded-full flex items-center justify-center shadow-glow hover:shadow-lg transition-all hover:scale-105 group"
-      aria-label={isOpen ? "Close AI Assistant" : "Open AI Assistant"}
+      aria-label={isOpen ? "Close messages" : "Open messages"}
     >
       {/* Pulse Ring Animation */}
       {!isOpen && (
@@ -22,13 +22,13 @@ const FloatingChatButton: React.FC<FloatingChatButtonProps> = ({ onClick, isOpen
       {isOpen ? (
         <X className="w-7 h-7 text-white" />
       ) : (
-        <Bot className="w-7 h-7 text-white" />
+        <MessageCircle className="w-7 h-7 text-white" />
       )}
       
       {/* Tooltip */}
       {!isOpen && (
         <span className="absolute right-full mr-4 px-4 py-2 bg-foreground text-background text-sm font-medium rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
-          Ask TripSync AI
+          Chats
         </span>
       )}
     </button>

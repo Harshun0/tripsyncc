@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
       { label: 'Features', href: '#' },
       { label: 'AI Itinerary', href: '#' },
       { label: 'Trip Matching', href: '#' },
-      { label: 'Safety Tools', href: '#' },
+      { label: 'Connect', href: '#' },
     ],
     company: [
       { label: 'About Us', href: '#' },

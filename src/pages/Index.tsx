@@ -7,16 +7,16 @@ import FeaturesSection from '@/components/sections/FeaturesSection';
 import TravelersSection from '@/components/sections/TravelersSection';
 import FeedSection from '@/components/sections/FeedSection';
 import ItinerarySection from '@/components/sections/ItinerarySection';
-import SafetySection from '@/components/sections/SafetySection';
+import ConnectSection from '@/components/sections/ConnectSection';
 import ExpenseSection from '@/components/sections/ExpenseSection';
 import ProfileSection from '@/components/sections/ProfileSection';
-import AIChatModal from '@/components/sections/AIChatModal';
+import MessagesModal from '@/components/sections/MessagesModal';
 import OnboardingScreen from '@/components/screens/OnboardingScreen';
 
 const Index: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [activeSection, setActiveSection] = useState('landing');
-  const [showAIChat, setShowAIChat] = useState(false);
+  const [showMessages, setShowMessages] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleNavigate = (section: string) => {
@@ -57,7 +57,7 @@ const Index: React.FC = () => {
             <FeaturesSection />
             <TravelersSection />
             <ItinerarySection />
-            <SafetySection />
+            <ConnectSection />
           </>
         );
       case 'home':
@@ -78,10 +78,10 @@ const Index: React.FC = () => {
             <ItinerarySection />
           </div>
         );
-      case 'safety':
+      case 'connect':
         return (
           <div className="pt-20">
-            <SafetySection />
+            <ConnectSection />
           </div>
         );
       case 'expenses':
@@ -97,7 +97,7 @@ const Index: React.FC = () => {
           </div>
         );
       case 'ai':
-        setShowAIChat(true);
+        setShowMessages(false);
         setActiveSection('landing');
         return (
           <>
@@ -136,16 +136,16 @@ const Index: React.FC = () => {
       
       <Footer />
       
-      {/* Floating AI Chat Button */}
+      {/* Floating Messages Button */}
       <FloatingChatButton 
-        onClick={() => setShowAIChat(!showAIChat)} 
-        isOpen={showAIChat}
+        onClick={() => setShowMessages(!showMessages)} 
+        isOpen={showMessages}
       />
       
-      {/* AI Chat Modal */}
-      <AIChatModal 
-        isOpen={showAIChat} 
-        onClose={() => setShowAIChat(false)} 
+      {/* Messages Modal - Chats with persons */}
+      <MessagesModal 
+        isOpen={showMessages} 
+        onClose={() => setShowMessages(false)} 
       />
     </div>
   );

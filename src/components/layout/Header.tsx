@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isLoggedIn, 
     { id: 'home', label: 'Home' },
     { id: 'explore', label: 'Explore' },
     { id: 'itinerary', label: 'AI Itinerary' },
-    { id: 'safety', label: 'Safety' },
+    { id: 'connect', label: 'Connect' },
     { id: 'expenses', label: 'Expenses' },
   ];
 
